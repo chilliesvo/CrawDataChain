@@ -1,7 +1,6 @@
 // Loading env configs for deploying and public contract source
 require("dotenv").config();
 
-
 // Using hardhat-ethers plugin for deploying
 // See here: https://hardhat.org/plugins/nomiclabs-hardhat-ethers.html
 //           https://hardhat.org/guides/deploying.html
@@ -11,28 +10,13 @@ require("@nomiclabs/hardhat-ethers");
 // See here: https://hardhat.org/guides/waffle-testing.html
 require("@nomiclabs/hardhat-waffle");
 
-// This plugin runs solhint on the project's sources and prints the report
-// See here: https://hardhat.org/plugins/nomiclabs-hardhat-solhint.html
-require("@nomiclabs/hardhat-solhint");
-
 // Verify and public source code on etherscan
 require("@nomiclabs/hardhat-etherscan");
 
 require("@openzeppelin/hardhat-upgrades");
 
-require("hardhat-contract-sizer");
-
 if (process.env.REPORT_GAS) {
     require("hardhat-gas-reporter");
-}
-
-if (process.env.EXPOSED) {
-    // Expose internal functions for smart contract testing
-    require("hardhat-exposed");
-}
-
-if (process.env.REPORT_COVERAGE) {
-    require("solidity-coverage");
 }
 
 // This plugin adds ways to ignore Solidity warnings
@@ -51,12 +35,16 @@ const config = {
             url: process.env.GOERLI_RPC,
             accounts: [process.env.SYSTEM_PRIVATE_KEY],
         },
-        binance_testnet: {
+        tbsc: {
             url: process.env.BINANCE_TESTNET_RPC,
             accounts: [process.env.SYSTEM_PRIVATE_KEY],
         },
         mumbai: {
             url: process.env.MUMBAI_RPC,
+            accounts: [process.env.SYSTEM_PRIVATE_KEY],
+        },
+        cvc: {
+            url: process.env.CVC_RPC,
             accounts: [process.env.SYSTEM_PRIVATE_KEY],
         },
         frame: {
@@ -95,12 +83,6 @@ const config = {
         deploy: "deploy",
         deployments: "deployments",
     },
-    contractSizer: {
-        alphaSort: true,
-        disambiguatePaths: false,
-        runOnCompile: false,
-        strict: true,
-    },
     mocha: {
         timeout: 200000,
         useColors: true,
@@ -108,15 +90,6 @@ const config = {
         reporterOptions: {
             configFile: "./mocha-report.json",
         },
-    },
-    gasReporter: {
-        enabled: process.env.REPORT_GAS ? true : false,
-        currency: "USD",
-        token: "ETH",
-        noColors: true, //optional
-        gasPrice: 10, //gwei
-        outputFile: process.env.EXPORT_GAS ? "gas-report.txt" : "", //optional
-        coinmarketcap: process.env.COIN_MARKET_API,
     },
     exposed: {
         prefix: "$",
