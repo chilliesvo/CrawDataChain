@@ -112,7 +112,4 @@ module.exports = {
     deployAndLogger,
     deployProxyAndLogger,
     getDeployedInfo,
-    getCrossmintAddress,
-    getForwarderAddresses,
-    getNativeTokenWrapperAddress,
 };

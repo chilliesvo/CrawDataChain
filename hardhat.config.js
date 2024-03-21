@@ -47,6 +47,10 @@ const config = {
             url: process.env.CVC_RPC,
             accounts: [process.env.SYSTEM_PRIVATE_KEY],
         },
+        tcvc: {
+            url: process.env.CVC_TESTNET_RPC,
+            accounts: [process.env.SYSTEM_PRIVATE_KEY],
+        },
         frame: {
             url: 'http://127.0.0.1:1248', // To run inside WSL2, see IP in file /etc/resolv.conf
             timeout: 4000000
@@ -66,6 +70,15 @@ const config = {
         compilers: [
             {
                 version: "0.8.18",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                        runs: 200,
+                    },
+                },
+            },
+            {
+                version: "0.8.16",
                 settings: {
                     optimizer: {
                         enabled: true,

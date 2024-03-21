@@ -1,7 +1,7 @@
 const { ethers } = require("hardhat");
 const {
-    deployProxyAndLogger,
     contractFactoriesLoader,
+    deployAndLogger,
 } = require("../utils/deploy.utils");
 const { blockTimestamp } = require("../utils/utils");
 require("dotenv").config();
@@ -38,10 +38,7 @@ async function main() {
         deployer,
     };
 
-    const constructorParams = [];
-    const contractInstance = await deployProxyAndLogger(contractFactories.contract, constructorParams);
-    verifyArguments.contractInstance = contractInstance.address;
-    verifyArguments.contractInstanceVerify = contractInstance.addressVerify;
+    const contractInstance = await deployAndLogger(contractFactories.NFTChecker);
 
     console.log(underline);
     console.log("DONE");
