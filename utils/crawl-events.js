@@ -4,16 +4,13 @@ require("dotenv").config();
 const env = process.env;
 const fs = require("fs");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
-const { blockTimestamp } = require("../test/utils");
 
-const ABI = JSON.stringify(require("./abi.json"));
 const RPC_PROVIDER = env.POLYGON_RPC;
 
 const crawlEvents = async (contractAddress, fromBlock, toBlock) => {
     //* Get network */
     const network = await ethers.provider.getNetwork();
     const networkName = network.chainId === 31337 ? "hardhat" : network.name;
-    const blockTimeNow = await blockTimestamp();
 
     const rpcProvider = new ethers.providers.JsonRpcProvider(RPC_PROVIDER);
     const factoryContract = new ethers.Contract(contractAddress, ABI, rpcProvider);

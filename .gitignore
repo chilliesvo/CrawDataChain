@@ -11,6 +11,9 @@ node_modules
 /contracts.json
 /contracts-exposed
 /deployed
+/deploy-history
+/scan-export
+Flatten.sol
 
 # Logs
 logs
