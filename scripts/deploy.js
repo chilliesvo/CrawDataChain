@@ -38,7 +38,7 @@ async function main() {
         deployer,
     };
 
-    const contractInstance = await deployAndLogger(contractFactories.NFTChecker);
+    await deployAndLogger(contractFactories.NFTChecker);
 
     console.log(underline);
     console.log("DONE");
