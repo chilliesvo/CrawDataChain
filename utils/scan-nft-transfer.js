@@ -4,8 +4,10 @@ require("dotenv").config();
 const env = process.env;
 const fs = require("fs");
 
-const rpcProvider = new ethers.providers.JsonRpcProvider(env.CVC_TESTNET_RPC);
-const NFTChecker_ADDRESS = "0x22978e83A94a101E9A37ff0f2Fc9dC54AA5e6E54"; //CVC_TESTNET
+// const rpcProvider = new ethers.providers.JsonRpcProvider(env.CVC_TESTNET_RPC);
+// const NFTChecker_ADDRESS = "0x22978e83A94a101E9A37ff0f2Fc9dC54AA5e6E54"; //CVC_TESTNET
+const NFTChecker_ADDRESS = "0x03e6b92233F58d6087340126d5F6253B617BABC3"; //MUMBAI_TESTNET
+const rpcProvider = new ethers.providers.JsonRpcProvider(env.MUMBAI_RPC);
 
 const scanNftTransfer = async (fromBlock, toBlock, maxBlockToCrawl) => {
     //* Get network */
@@ -75,15 +77,22 @@ const getTransferTransactions = async (blockHistory, nftChecker) => {
 }
 
 const getOwnerHistory = async (transferTransactions, nftChecker) => {
+    const NFTInstance = await ethers.getContractFactory("ERC721");
     const ownerHistory = await Promise.all(transferTransactions.map(async tx => {
-        const isERC721 = await nftChecker.isERC721(tx.address);
+        const tokenAddress = tx.address;
+        const nftInstance = await NFTInstance.attach(tokenAddress);
+        const tokenName = await nftInstance.name();
+        const tokenSymbol = await nftInstance.symbol();
+        const isERC721 = await nftChecker.isERC721(tokenAddress);
 
         if (isERC721) {
             const [eventSignature, from, to, tokenId] = tx.topics;
             return {
                 blockNumber: tx.blockNumber,
                 tokenType: "ERC-721",
-                contractAddress: tx.address,
+                contractAddress: tokenAddress,
+                name: tokenName,
+                symbol: tokenSymbol,
                 eventSignature: eventSignature,
                 from: addressDecode(from),
                 to: addressDecode(to),
@@ -98,7 +107,9 @@ const getOwnerHistory = async (transferTransactions, nftChecker) => {
             return {
                 blockNumber: tx.blockNumber,
                 tokenType: "ERC-1155",
-                contractAddress: tx.address,
+                contractAddress: tokenAddress,
+                name: tokenName,
+                symbol: tokenSymbol,
                 eventSignature: eventSignature,
                 operator: addressDecode(operator),
                 from: addressDecode(from),
